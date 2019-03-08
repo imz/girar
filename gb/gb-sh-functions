@@ -218,9 +218,10 @@ maybe_cancel()
 		! [ "$repo_cur" = "$repo_prev" ]
 	then
 		stamp_echo >&2 'task will need a rebuild'
-		id=$(cat task/id) &&
-		gb-x-girar task-change-state "$id" REQUEUING &&
-		return 0 ||:
+		if id=$(cat task/id) && gb-x-girar task-change-state "$id" REQUEUING
+		then
+			return 0
+		fi
 	fi
 
 	return 1
