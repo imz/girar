@@ -188,7 +188,13 @@ exit_if_stopped_by_global_cutout_switches()
 
 maybe_cancel()
 {
-	[ -f task/abort ]
+	if [ -f task/abort ]; then
+		# The state is changed just for beauty.
+		[ "$(cat task/state)" = ABORTING ] ||
+			gb-x-girar task-change-state "$(cat task/id)" ABORTING ||:
+		return 0
+	fi
+	return 1
 }
 
 fail_if_task_abort_requested()
