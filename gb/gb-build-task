@@ -131,12 +131,19 @@ case "$state" in
 		else
 			state=FAILED
 		fi ;;
+	REQUEUING) # task/abort could also affect other states,
+		       # but there seems to be no need for this.
+		if [ -f task/abort ]; then
+			stamp_echo >>"$log" "task ABORTED"
+			rc=1; state=FAILED
+		fi ;;
 	*) rc=1; state=FAILED ;;
 esac
 
 stamp_echo >>"$log" "task #$id for $GB_REPO_NAME $state"
-
-if [ "$state" != TESTED -o -f task/test-only ]; then
+if [ "$state" = REQUEUING ]; then
+	gb-task-queue-rebuild
+elif [ "$state" != TESTED -o -f task/test-only ]; then
 	gb-x-girar task-change-state "$id" "$state"
 	gb-task-send-email "$id"
 else

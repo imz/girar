@@ -188,12 +188,41 @@ exit_if_stopped_by_global_cutout_switches()
 
 maybe_cancel()
 {
+	# task/abort has precedence over other reasons to cancel
 	if [ -f task/abort ]; then
 		# The state is changed just for beauty.
 		[ "$(cat task/state)" = ABORTING ] ||
 			gb-x-girar task-change-state "$(cat task/id)" ABORTING ||:
 		return 0
 	fi
+
+	# Optimization for iterations > 1: check whether the repo is out of date
+	# (similarly to gb-task-validate-state).
+	# We assume that on the first iteration all errors should be shown.
+	#
+	# Tell that we should cancel only if we could check all the data
+	# and succeeded setting the state to a special one.
+	# Else just rely on the old behavior to do such check after the build.
+	# The special state is not just for beauty; it affects the decision
+	# what to do at the end of gb-build-task. (This is similar to EPERM,
+	# which is also set during the build.)
+	#
+	# Otherwise, if the state is not changed, the build will fail at the end,
+	# although the old behavior without this check would be to queue a new rebuild.
+	[ "$(cat task/state)" = REQUEUING ] && return 0 ||: # already checked
+	local iter repo_cur repo_prev id
+	if iter="$(cat task/iter)" && [ -n "$iter" ] &&
+		[ "$iter" -gt 1 ] &&
+		repo_cur="$(readlink -e -- "$GB_REPO_DIR")" &&
+		repo_prev="$(readlink -e -- build/repo/prev)" &&
+		! [ "$repo_cur" = "$repo_prev" ]
+	then
+		stamp_echo >&2 'task will need a rebuild'
+		id=$(cat task/id) &&
+		gb-x-girar task-change-state "$id" REQUEUING &&
+		return 0 ||:
+	fi
+
 	return 1
 }
 

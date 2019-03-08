@@ -68,7 +68,7 @@ show_status()
 	case "$state" in
 		NEW)
 			label="label-default" ;;
-		AWAITING|POSTPONED|BUILDING|PENDING|COMMITTING)
+		AWAITING|POSTPONED|BUILDING|REQUEUING|PENDING|COMMITTING)
 			label="label-info" ;;
 		ABORTING|EPERM|FAILING|FAILED)
 			label="label-danger" ;;
