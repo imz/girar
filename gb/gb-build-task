@@ -71,7 +71,7 @@ gb-task-set-summary
 	gb-task-copy-packages
 	gb-task-build-prep
 	gb-task-build
-	fail_if_task_abort_requested
+	fail_if_result_not_needed
 	gb-x-girar task-make-index-html "$id" ||:
 
 	gb-x-girar webapi-task update "$id" ||:
@@ -114,7 +114,7 @@ gb-task-set-summary
 	gb-task-gen-hash
 	gb-task-save-repo
 
-	fail_if_task_abort_requested
+	fail_if_result_not_needed
 )
 
 rc=$?

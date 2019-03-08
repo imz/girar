@@ -2,7 +2,7 @@
 
 . gb-sh-functions
 
-fail_if_task_abort_requested
+fail_if_result_not_needed
 
 # This check does not apply to noarch packages.
 fgrep -qs -xv noarch plan/change-arch || exit 0

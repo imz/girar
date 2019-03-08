@@ -197,7 +197,7 @@ maybe_cancel()
 	return 1
 }
 
-fail_if_task_abort_requested()
+fail_if_result_not_needed()
 {
 	if maybe_cancel; then
 		stamp_echo >&2 "${1:+$1 }task processing CANCELLED"

@@ -2,7 +2,7 @@
 
 . gb-sh-functions
 
-fail_if_task_abort_requested
+fail_if_result_not_needed
 
 enable -f /usr/lib/bash/lockf lockf
 # Obtain a shared lock on the $GB_GEARS_DIR.

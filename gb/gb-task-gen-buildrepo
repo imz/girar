@@ -2,7 +2,7 @@
 
 . gb-sh-functions
 
-fail_if_task_abort_requested
+fail_if_result_not_needed
 
 # Use a fixed path so that genpkglist md5cache works.
 rm -rf "$GB_TMP_REPO_DIR"

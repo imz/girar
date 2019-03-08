@@ -2,7 +2,7 @@
 
 . gb-sh-functions
 
-fail_if_task_abort_requested
+fail_if_result_not_needed
 
 . gb-sh-tmpdir
 join -t$'\t' -o 1.1,1.2,1.3,1.4,1.5,2.3 plan/{add,rm}-src >$tmpdir/src

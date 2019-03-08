@@ -2,7 +2,7 @@
 
 . gb-sh-functions
 
-fail_if_task_abort_requested
+fail_if_result_not_needed
 
 if type -p $0-$GB_REPO_NAME >/dev/null; then
 	exec $0-$GB_REPO_NAME

@@ -2,7 +2,7 @@
 
 . gb-sh-functions
 
-fail_if_task_abort_requested
+fail_if_result_not_needed
 
 for i in $(gear_nums); do
 	if [ -s gears/$i/pkg.tar ]; then

@@ -7,7 +7,7 @@ rm_f="$1"; shift
 add_a_p="$1"; shift
 list_a_f="$1"; shift
 
-fail_if_task_abort_requested "[$arch]"
+fail_if_result_not_needed "[$arch]"
 
 . gb-sh-tmpdir
 
