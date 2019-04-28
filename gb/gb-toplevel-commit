@@ -36,6 +36,7 @@ while :; do
 	min_iter="$(gb-y-calc-max-iter BUILDING PENDING)" ||
 		min_iter=0
 	(
+		set -e
 		# Abuse our queue dir to signal that we are busy
 		# (and might have some work done soon).
 		builtin lockf -x "$GB_TASKS_DIR/index/$GB_REPO_NAME/pending"

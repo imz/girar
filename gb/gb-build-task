@@ -23,6 +23,7 @@ gb-task-set-summary
 
 rc=0
 (
+	set -e
 	exec >>"$log" 2>&1
 	task_prefix=
 	if [ -f task/test-only ]; then
