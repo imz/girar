@@ -249,7 +249,7 @@ mkdir -pm3775 install logs mail mail/bugmail mail/cvemail report
 mkdir -pm2775 arepo build plan
 
 # create group writable files required for build
-(umask 002; touch logs/events.$try.$iter.log task/iter task/try) || false
+(umask 002 && touch logs/events.$try.$iter.log task/iter task/try) || false
 
 # set/remove fail-early flag if requested
 case "$fail_mode" in
@@ -292,7 +292,7 @@ rm -f task/abort
 
 # save the message for posterity
 [ -z "$task_msg" ] ||
-	(umask 002; printf '%s\n' "$task_msg" > task/message) ||
+	(umask 002 && printf '%s\n' "$task_msg" > task/message) ||
 	false
 
 echo "$GIRAR_USER" > task/run

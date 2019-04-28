@@ -11,7 +11,7 @@ arch="${arepo_arch##*-}"
 
 if [ -s plan/arepo-copy-$arepo_arch -a \
    ! -s arepo/$arepo_arch/todo.list ]; then
-	(umask 002; mkdir -p arepo/$arepo_arch/rpms) || false
+	(umask 002 && mkdir -p arepo/$arepo_arch/rpms) || false
 	# remove stale copies
 	find arepo/$arepo_arch/rpms -mindepth 1 -maxdepth 1 -type f -name '*.rpm' -printf '%f\n' > "$tmpdir"/out
 	sort -u -o "$tmpdir"/out{,}
@@ -39,7 +39,7 @@ while read -r N B P; do
 	rm -f "arepo/$arepo_arch/rpms/$B"
 done < plan/arepo-copy-$arepo_arch
 
-(umask 002; mkdir -p arepo/$arepo_arch/rpms) || false
+(umask 002 && mkdir -p arepo/$arepo_arch/rpms) || false
 
 . shell-quote
 qvv() { quote_shell "$1=\"$(quote_shell "$2")\""; }

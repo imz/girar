@@ -26,7 +26,7 @@ if [ -s "$tmpdir"/affected ]; then
 	stamp_echo >&2 "following just built binary packages affect protected task #$guard:"
 	echo "$(oneliner "$(cat "$tmpdir"/affected)")"
 	stamp_echo >&2 'sorry for the inconvenience, another build iteration will be made later'
-	(umask 002; echo "$guard" >> task/depends) || false
+	(umask 002 && echo "$guard" >> task/depends) || false
 	sort -u -o task/depends task/depends
 	gb-x-girar task-change-state "$id" POSTPONED
 	exit 1

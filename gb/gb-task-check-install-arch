@@ -53,7 +53,7 @@ while read -r N EVR A F P I; do
 	fi
 
 	# copy install chroot identification to remote side
-	(umask 002; mkdir -p "install/$N/$arch") || false
+	(umask 002 && mkdir -p "install/$N/$arch") || false
 	gb-x-rsync-loop -qrlt --delete -- "install/$N/$arch/" "$remote_host:install/"
 
 	if gb-x-ssh "$remote_host" ./gb-remote-check-install \

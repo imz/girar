@@ -62,7 +62,7 @@ cut -f-4 plan/arepo-add-$arch >> "$tmpdir"/arepo-table
 sort -u "$tmpdir"/arepo-table > plan/arepo-table-$arch
 cut -f1 plan/arepo-table-$arch > plan/arepo-pkg-$arch
 
-(umask 002; mkdir -p arepo/$arch) || false
+(umask 002 && mkdir -p arepo/$arch) || false
 if ! cmp -s plan/arepo-pkg-$arch arepo/$arch/pkg.list; then
 	# pkg list changed, invalidate everything
 	> arepo/$arch/done.list
