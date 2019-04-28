@@ -21,6 +21,7 @@ gb-task-set-summary
 
 (umask 002 && > report/acl-addressees && > report/unmet-addressees) || exit
 
+rc=0
 (
 	exec >>"$log" 2>&1
 	task_prefix=
@@ -105,9 +106,8 @@ gb-task-set-summary
 	gb-task-save-repo
 
 	fail_if_task_abort_requested
-)
+) || rc=$?
 
-rc=$?
 state="$(cat task/state)"
 case "$state" in
 	EPERM|POSTPONED) rc=1 ;;
