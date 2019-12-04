@@ -282,6 +282,30 @@ trap '' HUP INT QUIT PIPE TERM
 echo $try > task/try
 echo 1 > task/iter
 girar-task-change-state "$id" "$next_state"
+if [ "$next_state" = POSTPONED ]; then
+	# The status of the dependencies might have changed since the last check.
+	# And if so, this task will remain in POSTPONED state forever,
+	# because it couldn't have been awaken since that last check,
+	# because it hasn't been in POSTPONED state yet.
+	# So, we must awake it ourselves.
+	if check_depends; then
+		[ -s task/depends ] || {
+			next_state=AWAITING
+			girar-task-change-state "$id" "$next_state"
+		}
+	else
+		next_state=FAILED
+		girar-task-change-state "$id" "$next_state"
+		girar-webapi-task update "$id"
+		false
+	fi
+
+	# At this moment, it's possible that this task is in POSTPONED state
+	# and is still locked. And if at this moment gb-y-awake-tasks is triggered
+	# by some of its dependencies, that will have no effect (it uses lockf -n).
+	# Hence, this task will remain in POSTPONED state forever. This is bad.
+	# Consider using lockf -x in gb-y-awake-tasks to avoid such situation.
+fi
 girar-webapi-task update "$id"
 
 echo >&2 "task #$id: try #$try is $next_state, result will be emailed to $owner@$EMAIL_DOMAIN"
